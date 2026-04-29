@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>Supabase Google 로그인 테스트</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; }
+    button { padding: 10px 20px; margin: 8px 4px; cursor: pointer; font-size: 14px; border-radius: 6px; border: none; }
+    .btn-primary { background: #4285F4; color: white; }
+    .btn-secondary { background: #555; color: white; }
+    .btn-danger { background: #d32f2f; color: white; }
+    .btn-success { background: #2e7d32; color: white; }
+    pre { background: #f4f4f4; padding: 12px; border-radius: 6px; overflow-x: auto; font-size: 12px; white-space: pre-wrap; word-break: break-all; }
+    .card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin: 16px 0; }
+    .label { font-weight: bold; margin-bottom: 6px; }
+    input[type=text] { width: 100%; box-sizing: border-box; padding: 8px; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; margin-top: 4px; }
+    .response { margin-top: 12px; }
+    h3 { margin-top: 24px; border-bottom: 2px solid #eee; padding-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <h2>🐾 ChawChaw 백엔드 인증 테스트</h2>
+
+  <!-- 1. 로그인 -->
+  <div class="card">
+    <div class="label">1단계: Google 로그인</div>
+    <button class="btn-primary" onclick="signInGoogle()">🔑 Google로 로그인</button>
+    <button class="btn-danger" onclick="signOut()">로그아웃</button>
+  </div>
+
+  <!-- 2. 토큰 표시 -->
+  <div class="card">
+    <div class="label">2단계: 발급된 JWT (Postman Authorization 헤더에 사용)</div>
+    <pre id="tokenBox">로그인 후 여기에 토큰이 표시됩니다.</pre>
+    <button class="btn-secondary" onclick="copyToken()">📋 토큰 복사</button>
+    <button class="btn-secondary" onclick="refreshToken()">🔄 토큰 갱신</button>
+  </div>
+
+  <!-- 3. API 테스트 -->
+  <div class="card">
+    <div class="label">3단계: API 직접 테스트</div>
+    <p>서버 URL: <input type="text" id="serverUrl" value="http://localhost:8080" /></p>
+
+    <h3>Auth</h3>
+    <button class="btn-success" onclick="callApi('POST', '/api/auth/sync')">POST /api/auth/sync</button>
+    <button class="btn-success" onclick="callApi('GET', '/api/auth/me')">GET /api/auth/me</button>
+
+    <h3>Pet</h3>
+    <button class="btn-success" onclick="callApi('GET', '/api/pets')">GET /api/pets</button>
+
+    <h3>Character</h3>
+    <button class="btn-success" onclick="callApi('GET', '/api/characters/pets/1')">GET /api/characters/pets/1</button>
+
+    <h3>Community</h3>
+    <button class="btn-success" onclick="callApi('GET', '/api/community/posts')">GET /api/community/posts</button>
+
+    <div class="response">
+      <div class="label">응답:</div>
+      <pre id="apiResponse">버튼을 클릭하면 응답이 표시됩니다.</pre>
+    </div>
+  </div>
+
+  <!-- 4. 커스텀 요청 -->
+  <div class="card">
+    <div class="label">4단계: 커스텀 요청</div>
+    <p>Method: <select id="customMethod"><option>GET</option><option>POST</option><option>PATCH</option><option>DELETE</option></select></p>
+    <p>Path: <input type="text" id="customPath" value="/api/auth/me" /></p>
+    <p>Body (JSON): <textarea id="customBody" rows="4" style="width:100%;box-sizing:border-box;font-size:13px;padding:8px;border:1px solid #ccc;border-radius:4px;"></textarea></p>
+    <button class="btn-primary" onclick="customCall()">▶ 요청 보내기</button>
+    <div class="response">
+      <pre id="customResponse">응답 대기 중...</pre>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ⚠️ 아래 값을 실제 Supabase 프로젝트 정보로 교체하세요
+    const SUPABASE_URL = 'https://qptbjdczwcwaheymmnml.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwdGJqZGN6d2N3YWhleW1tbm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5OTkxNDIsImV4cCI6MjA5MTU3NTE0Mn0.bRd_1cwMC1_1onllp_Ma8E6hmhBKb6th0jMF9Pn2Dys';
+
+    const { createClient } = supabase;
+    const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let currentToken = null;
+
+    // 페이지 로드 시 세션 확인
+    window.addEventListener('load', async () => {
+      const { data: { session } } = await client.auth.getSession();
+      if (session) updateToken(session.access_token);
+
+      // OAuth 리다이렉트 콜백 처리
+      client.auth.onAuthStateChange((_event, session) => {
+        if (session) updateToken(session.access_token);
+      });
+    });
+
+    async function signInGoogle() {
+      const { error } = await client.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.href }
+      });
+      if (error) alert('로그인 실패: ' + error.message);
+    }
+
+    async function signOut() {
+      await client.auth.signOut();
+      currentToken = null;
+      document.getElementById('tokenBox').textContent = '로그아웃 되었습니다.';
+    }
+
+    async function refreshToken() {
+      const { data, error } = await client.auth.refreshSession();
+      if (error) { alert('갱신 실패: ' + error.message); return; }
+      updateToken(data.session.access_token);
+    }
+
+    function updateToken(token) {
+      currentToken = token;
+      document.getElementById('tokenBox').textContent = token;
+    }
+
+    function copyToken() {
+      if (!currentToken) { alert('토큰이 없습니다. 먼저 로그인하세요.'); return; }
+      navigator.clipboard.writeText(currentToken);
+      alert('토큰이 클립보드에 복사되었습니다!');
+    }
+
+    async function callApi(method, path, body = null) {
+      if (!currentToken) { alert('먼저 로그인하세요.'); return; }
+      const url = document.getElementById('serverUrl').value + path;
+      const res = await fetch(url, {
+        method,
+        headers: {
+          'Authorization': 'Bearer ' + currentToken,
+          'Content-Type': 'application/json'
+        },
+        body: body ? JSON.stringify(body) : null
+      });
+      const text = await res.text();
+      let display;
+      try { display = JSON.stringify(JSON.parse(text), null, 2); } catch { display = text; }
+      document.getElementById('apiResponse').textContent = `HTTP ${res.status}\n\n${display}`;
+    }
+
+    async function customCall() {
+      if (!currentToken) { alert('먼저 로그인하세요.'); return; }
+      const method = document.getElementById('customMethod').value;
+      const path = document.getElementById('customPath').value;
+      const bodyText = document.getElementById('customBody').value;
+      const url = document.getElementById('serverUrl').value + path;
+      const options = {
+        method,
+        headers: {
+          'Authorization': 'Bearer ' + currentToken,
+          'Content-Type': 'application/json'
+        }
+      };
+      if (bodyText.trim()) options.body = bodyText;
+      const res = await fetch(url, options);
+      const text = await res.text();
+      let display;
+      try { display = JSON.stringify(JSON.parse(text), null, 2); } catch { display = text; }
+      document.getElementById('customResponse').textContent = `HTTP ${res.status}\n\n${display}`;
+    }
+  </script>
+</body>
+</html>
