@@ -69,6 +69,7 @@ src/main/resources/db/csv/ CSV 파일을 테이블 임포트로 적재
 ```
 src/main/java/com/petdiet/
 ├── ai/          # AI 식단 추천 및 이미지 생성
+├── llm/         # 범용 LLM 질의/응답
 ├── auth/        # 회원가입, 로그인, JWT, OAuth
 ├── character/   # 반려동물 캐릭터 생성·육성
 ├── client/      # 외부 서비스 클라이언트 (Supabase)
