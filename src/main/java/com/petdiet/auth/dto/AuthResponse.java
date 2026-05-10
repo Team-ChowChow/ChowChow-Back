@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 public class AuthResponse {
     private Integer userId;
     private Integer authId;
@@ -19,6 +19,8 @@ public class AuthResponse {
     private String authStatus;
     private boolean isNewUser;
     private String message;
+    private String accessToken;
+    private String refreshToken;
 
     public static AuthResponse of(User user, boolean isNewUser) {
         return of(user, null, isNewUser);

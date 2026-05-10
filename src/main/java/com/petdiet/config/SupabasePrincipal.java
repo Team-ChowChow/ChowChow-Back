@@ -6,5 +6,6 @@ public record SupabasePrincipal(
         UUID authUuid,
         String email,
         String name,
-        String avatarUrl
+        String avatarUrl,
+        String provider
 ) {}

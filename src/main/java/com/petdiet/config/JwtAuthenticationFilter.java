@@ -71,7 +71,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String name = extractName(claims);
                 String avatarUrl = extractAvatarUrl(claims);
 
-                SupabasePrincipal principal = new SupabasePrincipal(authUuid, email, name, avatarUrl);
+                String provider = extractProvider(claims);
+                SupabasePrincipal principal = new SupabasePrincipal(authUuid, email, name, avatarUrl, provider);
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                         principal, null, List.of(new SimpleGrantedAuthority("ROLE_USER"))
                 );
@@ -170,5 +171,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         Map<String, Object> meta = (Map<String, Object>) claims.get("user_metadata");
         if (meta == null) return null;
         return (String) meta.get("avatar_url");
+    }
+
+    @SuppressWarnings("unchecked")
+    private String extractProvider(Claims claims) {
+        Map<String, Object> appMeta = (Map<String, Object>) claims.get("app_metadata");
+        if (appMeta == null) return "email";
+        Object provider = appMeta.get("provider");
+        return provider != null ? provider.toString() : "email";
     }
 }

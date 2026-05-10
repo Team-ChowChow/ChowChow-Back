@@ -28,36 +28,33 @@ jwt:
 
 # Supabase 설정
 supabase:
-  url: https://qptbjdczwcwaheymmnml.supabase.co
-  anon-key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwdGJqZGN6d2N3YWhleW1tbm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5OTkxNDIsImV4cCI6MjA5MTU3NTE0Mn0.bRd_1cwMC1_1onllp_Ma8E6hmhBKb6th0jMF9Pn2Dys
-  service-role-key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwdGJqZGN6d2N3YWhleW1tbm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5OTkxNDIsImV4cCI6MjA5MTU3NTE0Mn0.bRd_1cwMC1_1onllp_Ma8E6hmhBKb6th0jMF9Pn2Dys
+  url: ${SUPABASE_URL}
+  anon-key: ${SUPABASE_ANON_KEY}
+  service-role-key: ${SUPABASE_SERVICE_ROLE_KEY}
   jwt-secret: ${SUPABASE_JWT_SECRET}
 
 # OpenAI 설정
 openai:
   api-key: ${OPENAI_API_KEY}
+  base-url: https://api.openai.com
   model: gpt-4o
   max-tokens: 2048
+  image-model: dall-e-3
+  image-size: 1024x1024
+  image-quality: standard
+
+# Resend 설정
+resend:
+  api-key: ${RESEND_API_KEY}
+
+# 앱 기본 URL
+app:
+  base-url: ${APP_BASE_URL:http://localhost:8080}
 
 # Spoonacular 설정
 spoonacular:
   api-key: ${SPOONACULAR_API_KEY}
   base-url: https://api.spoonacular.com
-
-# OAuth2 소셜 로그인
-oauth2:
-  kakao:
-    client-id: ${KAKAO_CLIENT_ID}
-    client-secret: ${KAKAO_CLIENT_SECRET}
-    redirect-uri: ${KAKAO_REDIRECT_URI}
-  google:
-    client-id: ${GOOGLE_CLIENT_ID}
-    client-secret: ${GOOGLE_CLIENT_SECRET}
-    redirect-uri: ${GOOGLE_REDIRECT_URI}
-  naver:
-    client-id: ${NAVER_CLIENT_ID}
-    client-secret: ${NAVER_CLIENT_SECRET}
-    redirect-uri: ${NAVER_REDIRECT_URI}
 
 logging:
   level:
