@@ -135,8 +135,7 @@ public class CommunityService {
     @Transactional
     public void deleteComment(UUID authUuid, Integer commentId) {
         User user = findUser(authUuid);
-        CommunityComment comment = findOwnedActiveComment(commentId, user);
-        comment.delete();
+        findOwnedActiveComment(commentId, user).delete();
     }
 
     private User findUser(UUID authUuid) {

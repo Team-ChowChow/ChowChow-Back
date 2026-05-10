@@ -31,13 +31,7 @@ public class UserService {
                 throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
             }
         }
-        user.updateProfile(
-            req.getUserName() != null ? req.getUserName() : user.getUserName(),
-            req.getUserProfileImg() != null ? req.getUserProfileImg() : user.getUserProfileImg()
-        );
-        if ("PENDING".equals(user.getUserStatus()) && req.getUserNickname() != null) {
-            user.activate();
-        }
+        user.updateProfile(req.getUserName(), req.getUserNickname(), req.getUserProfileImg());
         return UserProfileResponse.from(userRepository.save(user));
     }
 
@@ -54,14 +48,15 @@ public class UserService {
         User user = findUser(authUuid);
         UserSettings settings = userSettingsRepository.findById(user.getUserId())
                 .orElseGet(() -> createDefaultSettings(user));
-        settings.update(req.getIsNotificationEnabled(), req.getIsDarkMode(), req.getIsSearchHistoryEnabled());
+        settings.update(req.getIsNotificationEnabled(), req.getIsDarkMode(),
+                req.getIsSearchHistoryEnabled(), req.getIsPersonalInfoAgreed());
         return UserSettingsResponse.from(userSettingsRepository.save(settings));
     }
 
     @Transactional
     public void withdraw(UUID authUuid) {
         User user = findUser(authUuid);
-        user.updateProfile(user.getUserName(), user.getUserProfileImg());
+        user.deactivate();
     }
 
     private User findUser(UUID authUuid) {

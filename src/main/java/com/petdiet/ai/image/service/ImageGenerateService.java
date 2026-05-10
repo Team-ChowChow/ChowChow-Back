@@ -7,11 +7,9 @@ import com.petdiet.auth.entity.User;
 import com.petdiet.auth.repository.UserRepository;
 import com.petdiet.pet.entity.UserPet;
 import com.petdiet.pet.repository.UserPetRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
@@ -20,33 +18,52 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class ImageGenerateService {
 
     private final UserRepository userRepository;
     private final UserPetRepository userPetRepository;
     private final ObjectMapper objectMapper;
+    private final WebClient webClient;
+    private final String imageModel;
+    private final String imageSize;
+    private final String imageQuality;
 
-    @Value("${openai.api-key}")
-    private String openAiApiKey;
+    public ImageGenerateService(
+            UserRepository userRepository,
+            UserPetRepository userPetRepository,
+            ObjectMapper objectMapper,
+            @Value("${openai.api-key}") String apiKey,
+            @Value("${openai.base-url:https://api.openai.com}") String baseUrl,
+            @Value("${openai.image-model:dall-e-3}") String imageModel,
+            @Value("${openai.image-size:1024x1024}") String imageSize,
+            @Value("${openai.image-quality:standard}") String imageQuality) {
+        this.userRepository = userRepository;
+        this.userPetRepository = userPetRepository;
+        this.objectMapper = objectMapper;
+        this.imageModel = imageModel;
+        this.imageSize = imageSize;
+        this.imageQuality = imageQuality;
+        this.webClient = WebClient.builder()
+                .baseUrl(baseUrl)
+                .defaultHeader("Authorization", "Bearer " + apiKey)
+                .defaultHeader("Content-Type", "application/json")
+                .build();
+    }
 
-    @Transactional(readOnly = true)
     public ImageGenerateResponse generateCharacterImage(UUID authUuid, Integer petId, String style) {
         User user = userRepository.findByAuthUuid(authUuid)
                 .orElseThrow(() -> new IllegalStateException("유저를 찾을 수 없습니다."));
         UserPet pet = userPetRepository.findByPetIdAndUser(petId, user)
                 .orElseThrow(() -> new IllegalArgumentException("반려동물을 찾을 수 없습니다."));
 
-        String prompt = buildCharacterPrompt(pet, style);
         return ImageGenerateResponse.builder()
-                .imageUrl(callDallE(prompt))
+                .imageUrl(callDallE(buildCharacterPrompt(pet, style)))
                 .build();
     }
 
     public ImageGenerateResponse generateRecipeImage(String recipeName, List<String> ingredients, String description) {
-        String prompt = buildRecipePrompt(recipeName, ingredients, description);
         return ImageGenerateResponse.builder()
-                .imageUrl(callDallE(prompt))
+                .imageUrl(callDallE(buildRecipePrompt(recipeName, ingredients, description)))
                 .build();
     }
 
@@ -75,22 +92,16 @@ public class ImageGenerateService {
     }
 
     private String callDallE(String prompt) {
-        WebClient client = WebClient.builder()
-                .baseUrl("https://api.openai.com")
-                .defaultHeader("Authorization", "Bearer " + openAiApiKey)
-                .defaultHeader("Content-Type", "application/json")
-                .build();
-
         Map<String, Object> body = Map.of(
-                "model", "dall-e-3",
+                "model", imageModel,
                 "prompt", prompt,
                 "n", 1,
-                "size", "1024x1024",
-                "quality", "standard"
+                "size", imageSize,
+                "quality", imageQuality
         );
 
         try {
-            String responseBody = client.post()
+            String responseBody = webClient.post()
                     .uri("/v1/images/generations")
                     .bodyValue(body)
                     .retrieve()

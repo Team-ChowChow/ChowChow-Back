@@ -1,10 +1,123 @@
 allergyName,ingredientName
-닭고기 알러지,닭가슴살
-소고기 알러지,소고기
-유제품 알러지,플레인 요거트
-유제품 알러지,코티지 치즈
-글루텐 알러지,보리
-계란 알러지,계란
-생선 알러지,연어
-생선 알러지,참치
-대두 알러지,두부
+닭고기 알러지,chicken fat
+닭고기 알러지,chicken leg
+닭고기 알러지,chicken base
+닭고기 알러지,chicken feet
+닭고기 알러지,chicken wings
+닭고기 알러지,chicken broth
+닭고기 알러지,chicken stock
+닭고기 알러지,boneless skin on chicken thighs
+닭고기 알러지,chicken pieces
+닭고기 알러지,chicken gravy
+닭고기 알러지,chicken liver
+닭고기 알러지,chicken bones
+닭고기 알러지,ground chicken
+닭고기 알러지,chicken bratwurst
+닭고기 알러지,chicken breast
+닭고기 알러지,chicken tenders
+닭고기 알러지,chicken cutlet
+닭고기 알러지,chicken sausage
+닭고기 알러지,chicken giblets
+닭고기 알러지,chicken bouillon
+닭고기 알러지,chicken hearts
+소고기 알러지,beef
+소고기 알러지,beef base
+소고기 알러지,beef bone
+소고기 알러지,beef broth
+소고기 알러지,beef stock
+소고기 알러지,beef gravy
+소고기 알러지,beef shank
+소고기 알러지,beef cubes
+소고기 알러지,beef jerky
+소고기 알러지,beef tenderloin
+소고기 알러지,beef hearts
+소고기 알러지,beef franks
+소고기 알러지,beef patties
+소고기 알러지,beef brisket
+소고기 알러지,beef ravioli
+소고기 알러지,beef bouillon
+유제품 알러지,yogurt
+유제품 알러지,fat free yogurt
+유제품 알러지,greek yogurt
+유제품 알러지,plain yogurt
+유제품 알러지,low fat plain yogurt
+유제품 알러지,frozen yogurt
+유제품 알러지,vanilla yogurt
+유제품 알러지,fat free greek yogurt
+유제품 알러지,plain greek yogurt
+유제품 알러지,low fat greek yogurt
+유제품 알러지,fat free vanilla yogurt
+유제품 알러지,low fat vanilla yogurt
+유제품 알러지,vanilla frozen yogurt
+유제품 알러지,fat free vanilla greek yogurt
+유제품 알러지,low fat vanilla greek yogurt
+유제품 알러지,cheese
+유제품 알러지,cheese dip
+유제품 알러지,cheddar cheese soup
+유제품 알러지,cheese curds
+유제품 알러지,string cheese
+유제품 알러지,cheese ravioli
+유제품 알러지,shredded cheese
+유제품 알러지,soft cheese
+유제품 알러지,feta cheese
+유제품 알러지,monterey jack cheese
+유제품 알러지,cottage cheese
+유제품 알러지,fat free cottage cheese
+유제품 알러지,low fat cottage cheese
+유제품 알러지,buttermilk
+유제품 알러지,milk
+유제품 알러지,powdered milk
+유제품 알러지,2 percent milk
+유제품 알러지,1 percent milk
+유제품 알러지,fat free milk
+유제품 알러지,soured milk
+유제품 알러지,nonfat dry milk powder
+글루텐 알러지,quick cooking barley
+글루텐 알러지,cooked pearl barley
+글루텐 알러지,barley
+글루텐 알러지,barley flour
+글루텐 알러지,barley flakes
+글루텐 알러지,malted barley flour
+계란 알러지,duck eggs
+계란 알러지,egg
+계란 알러지,eggnog
+계란 알러지,egg whites
+계란 알러지,egg yolk
+계란 알러지,egg noodles
+계란 알러지,liquid egg whites
+계란 알러지,dried egg whites
+계란 알러지,cooked wide egg noodles
+계란 알러지,poached egg
+계란 알러지,chinese egg noodles
+계란 알러지,hard boiled egg
+생선 알러지,salmon
+생선 알러지,salmon roe
+생선 알러지,salmon fillets
+생선 알러지,salmon steak
+생선 알러지,canned salmon
+생선 알러지,smoked salmon
+생선 알러지,canned smoked salmon
+생선 알러지,tuna
+생선 알러지,tuna packed in water
+생선 알러지,tuna in olive oil
+생선 알러지,ahi tuna
+생선 알러지,ahi tuna steak
+생선 알러지,light tuna
+생선 알러지,fresh tuna
+생선 알러지,albacore tuna packed in oil
+생선 알러지,canned tuna
+생선 알러지,solid white tuna packed in water
+생선 알러지,yellowfin tuna
+생선 알러지,canned albacore tuna
+생선 알러지,sablefish
+생선 알러지,canned fish
+생선 알러지,fish sauce
+생선 알러지,fish stock
+대두 알러지,soy yogurt
+대두 알러지,soy cheese
+대두 알러지,soymilk
+대두 알러지,soy creamer
+대두 알러지,tofu
+대두 알러지,firm tofu
+대두 알러지,silken tofu
+대두 알러지,extra firm tofu

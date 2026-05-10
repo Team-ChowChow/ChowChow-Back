@@ -52,9 +52,14 @@ public class UserSettings {
     @Column(name = "\"updatedAt\"", nullable = false)
     private OffsetDateTime updatedAt;
 
-    public void update(Boolean isNotificationEnabled, Boolean isDarkMode, Boolean isSearchHistoryEnabled) {
+    public void update(Boolean isNotificationEnabled, Boolean isDarkMode,
+                       Boolean isSearchHistoryEnabled, Boolean isPersonalInfoAgreed) {
         if (isNotificationEnabled != null) this.isNotificationEnabled = isNotificationEnabled;
         if (isDarkMode != null) this.isDarkMode = isDarkMode;
         if (isSearchHistoryEnabled != null) this.isSearchHistoryEnabled = isSearchHistoryEnabled;
+        if (isPersonalInfoAgreed != null && isPersonalInfoAgreed && !Boolean.TRUE.equals(this.isPersonalInfoAgreed)) {
+            this.isPersonalInfoAgreed = true;
+            this.personalInfoAgreedAt = OffsetDateTime.now();
+        }
     }
 }

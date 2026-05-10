@@ -12,9 +12,4 @@ public class UserProfileUpdateRequest {
     private String userNickname;
 
     private String userProfileImg;
-    private String userProfileimg;
-
-    public String getUserProfileImg() {
-        return userProfileImg != null ? userProfileImg : userProfileimg;
-    }
 }

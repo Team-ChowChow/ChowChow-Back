@@ -28,6 +28,7 @@ public class ImageGenerateController {
 
     @PostMapping("/recipe")
     public ResponseEntity<ImageGenerateResponse> generateRecipeImage(
+            @AuthenticationPrincipal SupabasePrincipal principal,
             @RequestBody @Valid RecipeImageRequest request) {
         return ResponseEntity.ok(imageGenerateService.generateRecipeImage(
                 request.getRecipeName(), request.getIngredients(), request.getDescription()));

@@ -45,12 +45,17 @@ public class User {
     @Column(name = "\"userUpdatedAt\"", nullable = false)
     private OffsetDateTime userUpdatedAt;
 
-    public void updateProfile(String userName, String userProfileImg) {
-        this.userName = userName;
-        this.userProfileImg = userProfileImg;
+    public void updateProfile(String userName, String userNickname, String userProfileImg) {
+        if (userName != null) this.userName = userName;
+        if (userNickname != null) this.userNickname = userNickname;
+        if (userProfileImg != null) this.userProfileImg = userProfileImg;
     }
 
     public void activate() {
         this.userStatus = "ACTIVE";
+    }
+
+    public void deactivate() {
+        this.userStatus = "WITHDRAWN";
     }
 }
