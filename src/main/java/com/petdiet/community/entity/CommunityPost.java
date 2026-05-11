@@ -27,6 +27,12 @@ public class CommunityPost {
     @JoinColumn(name = "\"userId\"", nullable = false)
     private User user;
 
+    @Column(name = "\"petId\"")
+    private Integer petId;
+
+    @Column(name = "\"recipeId\"")
+    private Integer recipeId;
+
     @Column(name = "\"postTitle\"", nullable = false)
     private String postTitle;
 
@@ -42,6 +48,14 @@ public class CommunityPost {
     @Builder.Default
     @Column(name = "\"viewCount\"", nullable = false)
     private Integer viewCount = 0;
+
+    @Builder.Default
+    @Column(name = "\"likeCount\"", nullable = false)
+    private Integer likeCount = 0;
+
+    @Builder.Default
+    @Column(name = "\"commentCount\"", nullable = false)
+    private Integer commentCount = 0;
 
     @Builder.Default
     @Column(name = "\"postStatus\"", nullable = false)
@@ -69,6 +83,11 @@ public class CommunityPost {
         if (postImageUrl != null) this.postImageUrl = postImageUrl;
         if (postCategory != null) this.postCategory = postCategory;
     }
+
+    public void incrementLikeCount() { this.likeCount++; }
+    public void decrementLikeCount() { if (this.likeCount > 0) this.likeCount--; }
+    public void incrementCommentCount() { this.commentCount++; }
+    public void decrementCommentCount() { if (this.commentCount > 0) this.commentCount--; }
 
     public void delete() {
         this.postStatus = "DELETED";

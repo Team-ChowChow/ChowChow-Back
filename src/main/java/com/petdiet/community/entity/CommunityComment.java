@@ -29,6 +29,9 @@ public class CommunityComment {
     @JoinColumn(name = "\"userId\"", nullable = false)
     private User user;
 
+    @Column(name = "\"parentCommentId\"")
+    private Integer parentCommentId;
+
     @Column(name = "\"commentContent\"", nullable = false, columnDefinition = "TEXT")
     private String commentContent;
 

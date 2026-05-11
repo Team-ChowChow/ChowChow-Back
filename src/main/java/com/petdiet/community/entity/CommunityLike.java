@@ -18,8 +18,8 @@ public class CommunityLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "\"likeId\"")
-    private Integer likeId;
+    @Column(name = "\"communityLikeId\"")
+    private Integer communityLikeId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "\"postId\"", nullable = false)

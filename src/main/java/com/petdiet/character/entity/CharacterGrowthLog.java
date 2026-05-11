@@ -23,16 +23,26 @@ public class CharacterGrowthLog {
     @JoinColumn(name = "\"characterId\"", nullable = false)
     private PetCharacter character;
 
+    @Column(name = "\"userId\"")
+    private Integer userId;
+
     @Column(name = "\"activityType\"", nullable = false)
     private String activityType;
 
-    @Column(name = "\"expGained\"", nullable = false)
+    @Builder.Default
+    @Column(name = "\"expAmount\"", nullable = false)
+    private Integer expAmount = 0;
+
+    @Column(name = "\"activityDescription\"")
+    private String activityDescription;
+
+    @Column(name = "\"expGained\"")
     private Integer expGained;
 
-    @Column(name = "\"currentExp\"", nullable = false)
+    @Column(name = "\"currentExp\"")
     private Integer currentExp;
 
-    @Column(name = "\"currentLevel\"", nullable = false)
+    @Column(name = "\"currentLevel\"")
     private Integer currentLevel;
 
     @CreationTimestamp

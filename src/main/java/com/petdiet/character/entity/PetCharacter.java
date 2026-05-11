@@ -30,6 +30,9 @@ public class PetCharacter {
     @Column(name = "\"characterName\"", nullable = false)
     private String characterName;
 
+    @Column(name = "\"characterImageUrl\"", columnDefinition = "TEXT")
+    private String characterImageUrl;
+
     @Builder.Default
     @Column(name = "\"characterLevel\"", nullable = false)
     private Integer characterLevel = 1;
