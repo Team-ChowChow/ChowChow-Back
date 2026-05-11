@@ -156,8 +156,9 @@ public class RecipeService {
                 RecipeIngredient.builder()
                         .recipe(recipe)
                         .ingredientId(dto.getIngredientId())
-                        .amount(dto.getAmount())
-                        .unit(dto.getUnit())
+                        .ingredientAmount(dto.getAmount())
+                        .ingredientUnit(dto.getUnit())
+                        .ingredientNote(dto.getNote())
                         .build()));
     }
 
@@ -168,7 +169,7 @@ public class RecipeService {
                         .recipe(recipe)
                         .stepNumber(dto.getStepNumber())
                         .stepDescription(dto.getStepDescription())
-                        .stepImageUrl(dto.getStepImageUrl())
+                        .stepImage(dto.getStepImage())
                         .build()));
     }
 

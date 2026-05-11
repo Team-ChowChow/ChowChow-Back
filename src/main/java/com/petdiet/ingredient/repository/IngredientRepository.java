@@ -7,10 +7,17 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IngredientRepository extends JpaRepository<Ingredient, Integer> {
 
     boolean existsByIngredientName(String ingredientName);
+
+    Optional<Ingredient> findByIngredientName(String ingredientName);
+
+    Optional<Ingredient> findByIngredientNameKo(String ingredientNameKo);
+
+    List<Ingredient> findByIngredientNameKoContainingIgnoreCase(String keyword);
 
     List<Ingredient> findByIngredientNameKoIsNull(Pageable pageable);
 

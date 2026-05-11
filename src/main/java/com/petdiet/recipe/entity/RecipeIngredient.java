@@ -3,6 +3,8 @@ package com.petdiet.recipe.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "\"RecipeIngredients\"")
 @Getter
@@ -23,9 +25,12 @@ public class RecipeIngredient {
     @Column(name = "\"ingredientId\"", nullable = false)
     private Integer ingredientId;
 
-    @Column(name = "\"amount\"")
-    private String amount;
+    @Column(name = "\"ingredientAmount\"", precision = 10, scale = 2)
+    private BigDecimal ingredientAmount;
 
-    @Column(name = "\"unit\"")
-    private String unit;
+    @Column(name = "\"ingredientUnit\"", length = 20)
+    private String ingredientUnit;
+
+    @Column(name = "\"ingredientNote\"", length = 200)
+    private String ingredientNote;
 }

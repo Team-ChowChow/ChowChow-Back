@@ -19,9 +19,6 @@ public class RecipeRequest {
     private String recipeDescription;
     private String recipePurpose;
     private String feedingAmount;
-    private String difficulty;
-    private Integer cookingTime;
-    private String requestNote;
     private Boolean isPublic;
 
     private List<RecipeIngredientDto> ingredients;

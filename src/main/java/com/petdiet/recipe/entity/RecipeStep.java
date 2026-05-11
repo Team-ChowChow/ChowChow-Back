@@ -26,6 +26,6 @@ public class RecipeStep {
     @Column(name = "\"stepDescription\"", nullable = false, columnDefinition = "TEXT")
     private String stepDescription;
 
-    @Column(name = "\"stepImageUrl\"")
-    private String stepImageUrl;
+    @Column(name = "\"stepImage\"")
+    private String stepImage;
 }
