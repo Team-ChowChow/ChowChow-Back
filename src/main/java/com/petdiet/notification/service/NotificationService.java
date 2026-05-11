@@ -78,7 +78,7 @@ public class NotificationService {
         User user = findUser(authUuid);
         UserSettings settings = userSettingsRepository.findById(user.getUserId())
                 .orElseGet(() -> UserSettings.builder().user(user).build());
-        settings.update(enabled, null, null);
+        settings.update(enabled, null, null, null);
         return userSettingsRepository.save(settings).getIsNotificationEnabled();
     }
 

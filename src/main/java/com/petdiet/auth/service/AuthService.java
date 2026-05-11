@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,7 +40,18 @@ public class AuthService {
 
     @Transactional
     public AuthResponse signup(SignupRequest req) {
-        if (!isEmailAvailable(req.getEmail())) {
+        List<AuthAccount> existing = authAccountRepository.findAllByAuthEmail(req.getEmail());
+        if (!existing.isEmpty()) {
+            boolean hasSocial = existing.stream().anyMatch(a -> !"EMAIL".equals(a.getAuthProvider()));
+            boolean hasEmail = existing.stream().anyMatch(a -> "EMAIL".equals(a.getAuthProvider()));
+            if (hasSocial && !hasEmail) {
+                String provider = existing.stream()
+                        .filter(a -> !"EMAIL".equals(a.getAuthProvider()))
+                        .map(AuthAccount::getAuthProvider)
+                        .findFirst().orElse("소셜");
+                throw new IllegalArgumentException(
+                        providerDisplayName(provider) + " 계정으로 가입된 이메일입니다. " + providerDisplayName(provider) + " 로그인을 이용해주세요.");
+            }
             throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
         }
 
@@ -58,6 +70,18 @@ public class AuthService {
 
     @Transactional
     public AuthResponse login(LoginRequest req) {
+        List<AuthAccount> accounts = authAccountRepository.findAllByAuthEmail(req.getEmail());
+        if (!accounts.isEmpty()) {
+            boolean hasEmail = accounts.stream().anyMatch(a -> "EMAIL".equals(a.getAuthProvider()));
+            if (!hasEmail) {
+                String provider = accounts.stream()
+                        .map(AuthAccount::getAuthProvider)
+                        .findFirst().orElse("소셜");
+                throw new IllegalArgumentException(
+                        providerDisplayName(provider) + " 계정으로 가입된 이메일입니다. " + providerDisplayName(provider) + " 로그인을 이용해주세요.");
+            }
+        }
+
         SupabaseTokenResult result = supabaseAuthClient.login(req.getEmail(), req.getPassword());
 
         User user = userRepository.findByAuthUuid(result.authUuid())
@@ -160,6 +184,16 @@ public class AuthService {
                 .providerUserId(principal.authUuid().toString())
                 .authStatus("ACTIVE")
                 .build());
+    }
+
+    private String providerDisplayName(String provider) {
+        return switch (provider.toUpperCase()) {
+            case "GOOGLE" -> "구글";
+            case "KAKAO" -> "카카오";
+            case "NAVER" -> "네이버";
+            case "APPLE" -> "애플";
+            default -> provider;
+        };
     }
 
     private String generateNickname(String email) {
