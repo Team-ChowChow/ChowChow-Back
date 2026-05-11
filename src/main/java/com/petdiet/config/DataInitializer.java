@@ -35,29 +35,29 @@ public class DataInitializer implements ApplicationRunner {
     }
 
     private void loadAllergies() {
-        if (count("Allergies") > 0) return;
         List<Object[]> rows = new ArrayList<>();
         for (CSVRecord r : readCsv("db/csv/allergies.csv")) {
             rows.add(new Object[]{ r.get("allergyName"), r.get("allergyDescription") });
         }
         jdbc.batchUpdate(
-            "INSERT INTO \"Allergies\" (\"allergyName\", \"allergyDescription\") VALUES (?, ?) ON CONFLICT DO NOTHING",
+            "INSERT INTO \"Allergies\" (\"allergyName\", \"allergyDescription\") VALUES (?, ?)" +
+            " ON CONFLICT (\"allergyName\") DO UPDATE SET \"allergyDescription\" = EXCLUDED.\"allergyDescription\"",
             rows
         );
-        log.info("Allergies 삽입: {}건", rows.size());
+        log.info("Allergies upsert: {}건", rows.size());
     }
 
     private void loadDiseases() {
-        if (count("Diseases") > 0) return;
         List<Object[]> rows = new ArrayList<>();
         for (CSVRecord r : readCsv("db/csv/diseases.csv")) {
             rows.add(new Object[]{ r.get("diseaseName"), r.get("diseaseDescription") });
         }
         jdbc.batchUpdate(
-            "INSERT INTO \"Diseases\" (\"diseaseName\", \"diseaseDescription\") VALUES (?, ?) ON CONFLICT DO NOTHING",
+            "INSERT INTO \"Diseases\" (\"diseaseName\", \"diseaseDescription\") VALUES (?, ?)" +
+            " ON CONFLICT (\"diseaseName\") DO UPDATE SET \"diseaseDescription\" = EXCLUDED.\"diseaseDescription\"",
             rows
         );
-        log.info("Diseases 삽입: {}건", rows.size());
+        log.info("Diseases upsert: {}건", rows.size());
     }
 
     private void loadIngredients() {

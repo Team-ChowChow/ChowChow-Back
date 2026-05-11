@@ -33,6 +33,12 @@ public class Notification {
     @Column(name = "\"notificationContent\"")
     private String notificationContent;
 
+    @Column(name = "\"targetType\"")
+    private String targetType;
+
+    @Column(name = "\"targetId\"")
+    private Integer targetId;
+
     @Column(name = "\"relatedId\"")
     private Integer relatedId;
 
@@ -40,11 +46,15 @@ public class Notification {
     @Column(name = "\"isRead\"", nullable = false)
     private Boolean isRead = false;
 
+    @Column(name = "\"readAt\"")
+    private OffsetDateTime readAt;
+
     @CreationTimestamp
     @Column(name = "\"createdAt\"", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
     public void markAsRead() {
         this.isRead = true;
+        this.readAt = OffsetDateTime.now();
     }
 }

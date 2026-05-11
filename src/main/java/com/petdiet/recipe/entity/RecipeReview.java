@@ -29,8 +29,8 @@ public class RecipeReview {
     @JoinColumn(name = "\"userId\"", nullable = false)
     private User user;
 
-    @Column(name = "\"rating\"", nullable = false)
-    private Integer rating;
+    @Column(name = "\"rating\"")
+    private Double rating;
 
     @Column(name = "\"reviewContent\"", columnDefinition = "TEXT")
     private String reviewContent;
@@ -43,7 +43,7 @@ public class RecipeReview {
     @Column(name = "\"updatedAt\"", nullable = false)
     private OffsetDateTime updatedAt;
 
-    public void update(Integer rating, String reviewContent) {
+    public void update(Double rating, String reviewContent) {
         if (rating != null) this.rating = rating;
         if (reviewContent != null) this.reviewContent = reviewContent;
     }

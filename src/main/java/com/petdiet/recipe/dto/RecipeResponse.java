@@ -17,8 +17,8 @@ public class RecipeResponse {
     private String recipeDescription;
     private String recipePurpose;
     private String feedingAmount;
-    private String difficulty;
-    private Integer cookingTime;
+    private String imageUrl;
+    private String warnings;
     private Boolean isAiGenerated;
     private Boolean isPublic;
     private OffsetDateTime createdAt;
@@ -34,8 +34,8 @@ public class RecipeResponse {
                 .recipeDescription(recipe.getRecipeDescription())
                 .recipePurpose(recipe.getRecipePurpose())
                 .feedingAmount(recipe.getFeedingAmount())
-                .difficulty(null)
-                .cookingTime(null)
+                .imageUrl(recipe.getImageUrl())
+                .warnings(recipe.getWarnings())
                 .isAiGenerated(recipe.getIsAiGenerated())
                 .isPublic(recipe.getIsPublic())
                 .createdAt(recipe.getCreatedAt())

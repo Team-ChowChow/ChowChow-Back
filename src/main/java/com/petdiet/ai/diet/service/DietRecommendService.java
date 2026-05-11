@@ -66,8 +66,10 @@ public class DietRecommendService {
                 .build();
     }
 
+    public record RecommendContext(User user, UserPet pet, DietRecommendResponse response) {}
+
     @Transactional(readOnly = true)
-    public DietRecommendResponse recommend(UUID authUuid, Integer petId, String userNotes) {
+    public RecommendContext recommendWithContext(UUID authUuid, Integer petId, String userNotes) {
         User user = userRepository.findByAuthUuid(authUuid)
                 .orElseThrow(() -> new IllegalStateException("유저를 찾을 수 없습니다."));
         UserPet pet = userPetRepository.findByPetIdAndUser(petId, user)
@@ -75,16 +77,18 @@ public class DietRecommendService {
 
         List<Integer> allergyIds = pet.getAllergies().stream().map(a -> a.getAllergyId()).toList();
         List<Integer> diseaseIds = pet.getDiseases().stream().map(d -> d.getDiseaseId()).toList();
-
         List<Allergy> allergies = allergyRepository.findAllById(allergyIds);
         List<Disease> diseases = diseaseRepository.findAllById(diseaseIds);
-
-        Breed breed = (pet.getBreedId() != null)
-                ? breedRepository.findById(pet.getBreedId()).orElse(null)
-                : null;
+        Breed breed = (pet.getBreedId() != null) ? breedRepository.findById(pet.getBreedId()).orElse(null) : null;
 
         String prompt = buildPrompt(pet, breed, allergies, diseases, userNotes);
-        return callOpenAi(prompt);
+        DietRecommendResponse response = callOpenAi(prompt);
+        return new RecommendContext(user, pet, response);
+    }
+
+    @Transactional(readOnly = true)
+    public DietRecommendResponse recommend(UUID authUuid, Integer petId, String userNotes) {
+        return recommendWithContext(authUuid, petId, userNotes).response();
     }
 
     String buildPrompt(UserPet pet, Breed breed,

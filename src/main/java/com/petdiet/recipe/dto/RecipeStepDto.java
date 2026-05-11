@@ -9,13 +9,13 @@ import lombok.Getter;
 public class RecipeStepDto {
     private Integer stepNumber;
     private String stepDescription;
-    private String stepImageUrl;
+    private String stepImage;
 
     public static RecipeStepDto from(RecipeStep step) {
         return RecipeStepDto.builder()
                 .stepNumber(step.getStepNumber())
                 .stepDescription(step.getStepDescription())
-                .stepImageUrl(step.getStepImageUrl())
+                .stepImage(step.getStepImage())
                 .build();
     }
 }

@@ -39,6 +39,17 @@ public class Ingredient {
     @Column(name = "\"spoonacularId\"")
     private Integer spoonacularId;
 
+    @Builder.Default
+    @Column(name = "\"isToxicToDog\"", nullable = false)
+    private Boolean isToxicToDog = false;
+
+    @Builder.Default
+    @Column(name = "\"isToxicToCat\"", nullable = false)
+    private Boolean isToxicToCat = false;
+
+    @Column(name = "\"toxicityNote\"")
+    private String toxicityNote;
+
     @Column(name = "\"caloriesPer100g\"", precision = 8, scale = 2)
     private BigDecimal caloriesPer100g;
 
@@ -77,5 +88,11 @@ public class Ingredient {
         this.fatG = fat;
         this.carbohydrateG = carbohydrate;
         this.fiberG = fiber;
+    }
+
+    public void updateToxicity(boolean toxicToDog, boolean toxicToCat, String note) {
+        this.isToxicToDog = toxicToDog;
+        this.isToxicToCat = toxicToCat;
+        this.toxicityNote = note;
     }
 }

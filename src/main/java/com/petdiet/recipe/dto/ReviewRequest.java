@@ -9,13 +9,13 @@ import lombok.Getter;
 public class ReviewRequest {
     @NotNull
     @Min(1) @Max(5)
-    private Integer rating;
+    private Double rating;
     @Min(1) @Max(5)
-    private Integer starRating;
+    private Double starRating;
 
     private String reviewContent;
 
-    public Integer getRating() {
+    public Double getRating() {
         return rating != null ? rating : starRating;
     }
 }

@@ -47,6 +47,12 @@ public class Recipe {
     @Column(name = "\"feedingAmount\"")
     private String feedingAmount;
 
+    @Column(name = "\"imageUrl\"")
+    private String imageUrl;
+
+    @Column(name = "\"warnings\"", columnDefinition = "TEXT")
+    private String warnings;
+
     @Builder.Default
     @Column(name = "\"isAiGenerated\"", nullable = false)
     private Boolean isAiGenerated = false;
@@ -83,6 +89,10 @@ public class Recipe {
         if (recipePurpose != null) this.recipePurpose = recipePurpose;
         if (feedingAmount != null) this.feedingAmount = feedingAmount;
         if (isPublic != null) this.isPublic = isPublic;
+    }
+
+    public void updateImage(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void delete() {

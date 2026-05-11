@@ -12,8 +12,8 @@ public class ReviewResponse {
     private Integer reviewId;
     private Integer recipeId;
     private Integer userId;
-    private Integer rating;
-    private Integer starRating;
+    private Double rating;
+    private Double starRating;
     private String userNickname;
     private String reviewContent;
     private OffsetDateTime createdAt;
