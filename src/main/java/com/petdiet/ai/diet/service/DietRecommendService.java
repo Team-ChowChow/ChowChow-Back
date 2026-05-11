@@ -16,6 +16,7 @@ import com.petdiet.pet.repository.UserPetRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
@@ -65,6 +66,7 @@ public class DietRecommendService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public DietRecommendResponse recommend(UUID authUuid, Integer petId, String userNotes) {
         User user = userRepository.findByAuthUuid(authUuid)
                 .orElseThrow(() -> new IllegalStateException("유저를 찾을 수 없습니다."));
@@ -85,7 +87,7 @@ public class DietRecommendService {
         return callOpenAi(prompt);
     }
 
-    private String buildPrompt(UserPet pet, Breed breed,
+    String buildPrompt(UserPet pet, Breed breed,
                                 List<Allergy> allergies, List<Disease> diseases,
                                 String userNotes) {
         int ageMonths = 0;
